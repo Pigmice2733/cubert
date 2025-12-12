@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,8 +48,8 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double driveSpeed = controls.getDriveSpeed() * driveSpeedReduction.getDouble(1.0);
-    double turnSpeed = controls.getTurnSpeed() * turnSpeedReduction.getDouble(1.0);
+    double driveSpeed = MathUtil.clamp((controls.getDriveSpeed() * DrivetrainConfig.DRIVE_SPEED), -1.0, 0.5);
+    double turnSpeed = controls.getTurnSpeed() * DrivetrainConfig.TURN_SPEED;
     driveSpeed = driveSpeed * (slowMode ? DrivetrainConfig.SLOW_MULTIPLIER : 1.0);
     turnSpeed = turnSpeed * (slowMode ? DrivetrainConfig.SLOW_MULTIPLIER : 1.0);
     drivetrain.arcadeDrive(driveSpeed, turnSpeed);
